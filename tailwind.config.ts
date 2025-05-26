@@ -8,7 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {},
+      fontFamily: {
+        montserratExtrabold: ['var(--font-montserrat-extrabold)'],
+        montserratMedium: ['var(--font-montserrat-medium)'],
+        robotoRegular: ['var(--font-roboto-regular)'],
+        robotoBold: ['var(--font-roboto-bold)'],
+      },
       breakpoints: {
         xs: '320px',
         sm: '640px',

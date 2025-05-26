@@ -1,12 +1,29 @@
 'use client'
 
-import { Montserrat, Poppins } from 'next/font/google'
+import { Montserrat, Roboto } from 'next/font/google'
 
-// example
 export const montserratExtrabold = Montserrat({
   subsets: ['latin'],
   weight: ['800'], // Extrabold
   variable: '--font-montserrat-extrabold',
+})
+
+export const montserratRegular = Montserrat({
+  subsets: ['latin'],
+  weight: ['400'], // Regular
+  variable: '--font-montserrat-regular',
+})
+
+export const robotoRegular = Roboto({
+  subsets: ['latin'],
+  weight: ['400'], // Regular
+  variable: '--font-roboto-regular',
+})
+
+export const robotoBold = Roboto({
+  subsets: ['latin'],
+  weight: ['700'], // Bold
+  variable: '--font-roboto-bold',
 })
 
 export function LoadFonts() {
@@ -15,6 +32,9 @@ export function LoadFonts() {
       {`
         :root {
           --font-montserrat-extrabold: ${montserratExtrabold.style.fontFamily};
+          --font-montserrat-regular: ${montserratRegular.style.fontFamily};
+          --font-roboto-regular: ${robotoRegular.style.fontFamily};
+          --font-roboto-bold: ${robotoBold.style.fontFamily};
         }
       `}
     </style>
