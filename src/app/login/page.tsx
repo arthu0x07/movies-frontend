@@ -19,7 +19,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-[1366px] flex-col">
+      <div className="relative z-10 mx-auto flex min-h-screen flex-col">
         <Header />
 
         <main className="flex flex-1 items-center justify-center px-4">
