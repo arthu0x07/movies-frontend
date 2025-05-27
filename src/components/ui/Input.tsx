@@ -29,7 +29,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           className={twMerge(
             'min-h-[44px] rounded-[4px] border px-3 py-3 outline-none transition-colors',
             theme === 'dark'
-              ? 'border-mauve-dark-6 bg-mauve-dark-2 text-mauve-12 placeholder:text-mauve-dark-9'
+              ? 'border-mauve-dark-6 bg-mauve-dark-2 text-white placeholder:text-mauve-dark-9'
               : 'border-mauve-3 bg-white text-mauve-dark-1 placeholder:text-mauve-9',
             'focus:border-purple-9',
             error && 'border-red-500',

@@ -6,6 +6,10 @@ import { z } from 'zod'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { useTheme } from '@/contexts/ThemeContext'
+import { signIn } from '@/services/auth'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { AxiosError } from 'axios'
 
 const loginFormSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -16,6 +20,9 @@ type LoginFormData = z.infer<typeof loginFormSchema>
 
 export function LoginForm() {
   const { theme } = useTheme()
+  const router = useRouter()
+  const [error, setError] = useState('')
+
   const {
     register,
     handleSubmit,
@@ -30,15 +37,33 @@ export function LoginForm() {
 
   async function handleLogin(data: LoginFormData) {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log(data)
-    } catch (error) {
-      console.error(error)
+      console.log('Tentando fazer login com:', data)
+      setError('')
+      await signIn(data)
+      console.log('Login bem sucedido!')
+      router.push('/movies')
+    } catch (err) {
+      console.error('Erro no login:', err)
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          setError('E-mail ou senha incorretos')
+        } else {
+          setError('Erro ao fazer login. Tente novamente.')
+        }
+      } else {
+        setError('Erro ao fazer login. Tente novamente.')
+      }
     }
   }
 
   return (
     <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+      {error && (
+        <div className="rounded border border-red-500 bg-red-500/10 p-2 text-sm text-red-500">
+          {error}
+        </div>
+      )}
+
       <div className="space-y-4">
         <Input
           label="Nome/E-mail"
