@@ -1,15 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getImageUrl } from '@/utils/imageUrl'
 import { Genre } from '@/services/api'
-import Image from 'next/image'
 import { useTheme } from '@/contexts/ThemeContext'
 
 interface MovieCardProps {
   title: string
   posterUrl: string
   genres?: Genre[]
+  slug?: string
   onClick?: () => void
 }
 
@@ -17,18 +18,28 @@ export function MovieCard({
   title,
   posterUrl,
   genres,
+  slug,
   onClick,
 }: MovieCardProps) {
   const [imageError, setImageError] = useState(false)
   const { theme } = useTheme()
+  const router = useRouter()
 
   const handleImageError = () => {
     setImageError(true)
   }
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    } else if (slug) {
+      router.push(`/movies/${slug}`)
+    }
+  }
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       className="group relative flex h-[281px] w-[183px] flex-shrink-0 flex-col overflow-hidden rounded-md transition-transform duration-200 hover:scale-105 sm:h-[355px] sm:w-[235px]"
     >
       {!imageError ? (
@@ -59,7 +70,7 @@ export function MovieCard({
               fill="currentColor"
             />
           </svg>
-          <span className="text-center text-sm font-medium">
+          <span className="font-montserratMedium text-center text-sm">
             Imagem não disponível
           </span>
         </div>
@@ -68,7 +79,7 @@ export function MovieCard({
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
       <div className="absolute bottom-0 flex w-full flex-col justify-end px-4 pb-4 transition-all duration-200 group-hover:pb-6">
-        <h3 className="text-left text-base font-semibold uppercase text-white transition-transform duration-200 group-hover:-translate-y-2">
+        <h3 className="font-montserratSemibold text-left text-base uppercase text-white transition-transform duration-200 group-hover:-translate-y-2">
           {title}
         </h3>
 

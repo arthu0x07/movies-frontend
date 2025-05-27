@@ -14,7 +14,7 @@ export function Header() {
     <header
       className={`border-b px-4 py-3 backdrop-blur-sm ${
         theme === 'dark'
-          ? 'border-mauve-dark-alpha-6'
+          ? 'border-mauve-dark-alpha-6 bg-mauve-dark-1/90'
           : 'border-mauve-3 bg-white'
       }`}
     >

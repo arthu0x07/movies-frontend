@@ -43,6 +43,7 @@ export interface Genre {
 export interface Movie {
   id: string
   title: string
+  slug: string
   originalTitle: string
   description: string
   tagline: string
@@ -115,7 +116,7 @@ export async function getMovies(params?: GetMoviesParams) {
 export async function getMovieBySlug(slug: string) {
   const { data } = await api.get<{ data: Movie }>(`/movies/${slug}`)
 
-  return data.data
+  return data
 }
 
 export async function createMovie(movieData: CreateMovieData) {

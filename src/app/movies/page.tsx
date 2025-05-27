@@ -121,6 +121,7 @@ export default function MoviesPage() {
                   title={movie.title}
                   posterUrl={movie.file?.url}
                   genres={movie.genres}
+                  slug={movie.slug}
                 />
               ))
             )}
