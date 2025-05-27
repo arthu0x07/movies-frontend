@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         montserratExtrabold: ['var(--font-montserrat-extrabold)'],
+        montserratSemibold: ['var(--font-montserrat-semibold)'],
         montserratMedium: ['var(--font-montserrat-medium)'],
         robotoRegular: ['var(--font-roboto-regular)'],
         robotoBold: ['var(--font-roboto-bold)'],
