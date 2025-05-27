@@ -8,9 +8,16 @@ interface ModalProps {
   onClose: () => void
   title: string
   children: ReactNode
+  position?: 'center' | 'right'
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  position = 'center',
+}: ModalProps) {
   const { theme } = useTheme()
 
   // prevents the user from scrolling the page when the modal is open :)
@@ -36,8 +43,12 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       />
 
       <div
-        className={`relative z-10 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-md p-6 shadow-lg ${
+        className={`relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-md p-6 shadow-lg ${
           theme === 'dark' ? 'bg-mauve-dark-3' : 'bg-white'
+        } ${
+          position === 'right'
+            ? 'max-md:max-w-none md:ml-auto md:mr-4 md:max-w-[600px]'
+            : 'max-w-lg'
         }`}
       >
         <div className="mb-4 flex items-center justify-between">
