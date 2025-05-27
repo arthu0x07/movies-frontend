@@ -163,8 +163,8 @@ export default function MovieDetailsPage() {
       <div className="relative z-20 flex min-h-screen flex-col">
         <Header />
 
-        <main className="mx-auto mt-8 flex w-full max-w-[1366px] flex-1 flex-col">
-          <div className="relative flex flex-col overflow-hidden px-8 pt-8">
+        <main className="mx-auto mt-8 flex w-full max-w-[1366px] flex-1 flex-col pb-2">
+          <div className="relative overflow-hidden px-8 pt-8 max-sm:px-4">
             <div className="absolute right-0 top-0 z-10 h-[603px] w-[1448px] max-w-none">
               <img
                 src={
@@ -184,132 +184,319 @@ export default function MovieDetailsPage() {
               />
             </div>
 
-            <div className="relative z-30 mb-4 flex min-h-[59px] w-full items-center justify-between gap-4">
-              <div className="font-montserratSemibold flex flex-col text-white">
-                <h1 className="text-[32px] leading-tight">{movie.title}</h1>
-                <p className="font-montserratMedium text-base opacity-90">
+            <div className="relative z-30 mb-4 flex min-h-[59px] w-full items-center justify-between gap-4 max-sm:justify-center">
+              <div className="font-montserratSemibold flex flex-col text-white max-sm:hidden">
+                <h1 className="text-[32px] leading-tight max-lg:text-[28px] max-md:text-[24px]">
+                  {movie.title}
+                </h1>
+                <p className="font-montserratMedium text-base opacity-90 max-md:text-sm">
                   Título original: {movie.originalTitle}
                 </p>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 max-md:gap-2 max-sm:w-full max-sm:justify-center">
                 <Button
                   onClick={handleDeleteClick}
                   variant="secondary"
-                  className="font-montserratMedium"
+                  className="font-montserratMedium max-sm:flex-1"
                 >
                   Deletar
                 </Button>
-                <Button onClick={handleEdit} variant="primary">
+                <Button
+                  onClick={handleEdit}
+                  variant="primary"
+                  className="max-sm:flex-1"
+                >
                   Editar
                 </Button>
               </div>
             </div>
 
-            <div className="relative z-30 mt-4 flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="h-[542px] w-[374px] overflow-hidden rounded shadow-lg">
-                  {movie.file?.url ? (
-                    <img
-                      src={getImageUrl(movie.file.url)}
-                      alt={movie.title}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-mauve-dark-3 text-mauve-11">
-                      <span>Imagem não disponível</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex w-full flex-1 flex-col">
-                <div className="flex items-center justify-between gap-6">
-                  <div className="font-montserratMedium flex max-w-[416px] flex-1 flex-col items-center justify-center text-mauve-dark-12">
-                    <p className="text-base italic">{`"${movie.tagline}"`}</p>
-                  </div>
-
-                  <div className="font-montserratExtrabold flex items-center gap-4 text-center uppercase">
-                    <InfoCard
-                      title="Popularidade"
-                      value={movie.popularity.toLocaleString()}
-                    />
-
-                    <InfoCard
-                      title="Votos"
-                      value={movie.votes.toLocaleString()}
-                    />
-
-                    <div className="flex w-[98px] items-center justify-center">
-                      <CircularRating
-                        percentage={movie.ratingPercentage}
-                        size={98}
+            <div className="relative z-30 mt-4">
+              <div className="grid grid-cols-[374px_1fr] gap-6 max-xl:hidden">
+                <div>
+                  <div className="h-[542px] w-[374px] overflow-hidden rounded shadow-lg">
+                    {movie.file?.url ? (
+                      <img
+                        src={getImageUrl(movie.file.url)}
+                        alt={movie.title}
+                        className="h-full w-full object-cover"
                       />
-                    </div>
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-mauve-dark-3 text-mauve-11">
+                        <span>Imagem não disponível</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                <div className="mt-6 flex justify-between gap-6">
-                  <div className="flex flex-1 flex-col">
-                    <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-[minmax(300px,1fr)_minmax(280px,320px)] gap-6">
+                  <div className="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4">
+                    <div className="font-montserratMedium flex items-center justify-center text-white">
+                      <p className="break-words text-left text-base italic">{`"${movie.tagline}"`}</p>
+                    </div>
+
+                    <div className="min-w-0">
                       <SynopsisCard
                         title="Sinopse"
                         content={movie.description}
                       />
-
-                      <GenresSection
-                        title="Gêneros"
-                        genres={movie.genres || []}
-                        className="rounded bg-[#23222599] p-4"
-                      />
                     </div>
+
+                    <GenresSection
+                      title="Gêneros"
+                      genres={movie.genres || []}
+                      className="max-w-fit rounded bg-[#23222599] p-4"
+                    />
                   </div>
 
-                  <div className="flex flex-col">
-                    <div className="flex gap-4">
+                  <div className="grid min-w-0 auto-rows-max gap-4">
+                    <div className="grid grid-cols-[1fr_1fr_98px] items-center gap-4">
+                      <InfoCard
+                        title="Popularidade"
+                        value={movie.popularity.toLocaleString()}
+                      />
+                      <InfoCard
+                        title="Votos"
+                        value={movie.votes.toLocaleString()}
+                      />
+                      <div className="flex items-center justify-center">
+                        <CircularRating
+                          percentage={movie.ratingPercentage}
+                          size={98}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <InfoCard
                         title="Lançamento"
                         value={formatDate(movie.releaseDate)}
-                        className="flex-1"
                       />
                       <InfoCard
                         title="Duração"
                         value={formatDuration(movie.duration)}
-                        className="flex-1"
                       />
                     </div>
 
-                    <div className="mt-4 flex gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <InfoCard
                         title="Situação"
                         value={getStatusLabel(movie.status)}
-                        className="flex-1"
                       />
                       <InfoCard
                         title="Idioma"
                         value={getLanguageLabel(movie.language)}
-                        className="flex-1"
                       />
                     </div>
 
-                    <div className="mt-4 flex gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <InfoCard
                         title="Orçamento"
                         value={formatCurrency(movie.budget)}
-                        className="flex-1 px-3"
+                        className="px-3"
                       />
                       <InfoCard
                         title="Receita"
                         value={formatCurrency(movie.revenue)}
-                        className="flex-1 px-3"
+                        className="px-3"
                       />
                       <InfoCard
                         title="Lucro"
                         value={formatCurrency(movie.revenue - movie.budget)}
-                        className="flex-1 px-3"
+                        className="px-3"
                       />
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div className="hidden grid-cols-1 gap-6 max-xl:grid max-sm:hidden">
+                <div className="grid grid-cols-[300px_1fr] gap-6 max-lg:grid-cols-[250px_1fr] max-lg:gap-4">
+                  <div>
+                    <div className="h-[435px] w-[300px] overflow-hidden rounded shadow-lg max-lg:h-[362px] max-lg:w-[250px]">
+                      {movie.file?.url ? (
+                        <img
+                          src={getImageUrl(movie.file.url)}
+                          alt={movie.title}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-mauve-dark-3 text-mauve-11">
+                          <span>Imagem não disponível</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid auto-rows-max gap-4 max-lg:gap-3">
+                    <div className="grid grid-cols-[1fr_1fr_98px] items-center gap-4 max-lg:grid-cols-[1fr_1fr_80px] max-lg:gap-2">
+                      <InfoCard
+                        title="Popularidade"
+                        value={movie.popularity.toLocaleString()}
+                      />
+                      <InfoCard
+                        title="Votos"
+                        value={movie.votes.toLocaleString()}
+                      />
+                      <div className="flex items-center justify-center">
+                        <div className="max-lg:scale-75">
+                          <CircularRating
+                            percentage={movie.ratingPercentage}
+                            size={98}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 max-lg:gap-2">
+                      <InfoCard
+                        title="Lançamento"
+                        value={formatDate(movie.releaseDate)}
+                      />
+                      <InfoCard
+                        title="Duração"
+                        value={formatDuration(movie.duration)}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 max-lg:gap-2">
+                      <InfoCard
+                        title="Situação"
+                        value={getStatusLabel(movie.status)}
+                      />
+                      <InfoCard
+                        title="Idioma"
+                        value={getLanguageLabel(movie.language)}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4 max-lg:grid-cols-1 max-lg:gap-2">
+                      <InfoCard
+                        title="Orçamento"
+                        value={formatCurrency(movie.budget)}
+                        className="px-3 max-lg:px-4"
+                      />
+                      <InfoCard
+                        title="Receita"
+                        value={formatCurrency(movie.revenue)}
+                        className="px-3 max-lg:px-4"
+                      />
+                      <InfoCard
+                        title="Lucro"
+                        value={formatCurrency(movie.revenue - movie.budget)}
+                        className="px-3 max-lg:px-4"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="font-montserratMedium flex items-center justify-center text-white">
+                    <p className="break-words text-center text-base italic max-lg:text-sm">{`"${movie.tagline}"`}</p>
+                  </div>
+
+                  <SynopsisCard title="Sinopse" content={movie.description} />
+
+                  <GenresSection
+                    title="Gêneros"
+                    genres={movie.genres || []}
+                    className="rounded bg-[#23222599] p-4 max-lg:p-3"
+                  />
+                </div>
+              </div>
+
+              <div className="hidden grid-cols-1 gap-4 max-sm:grid">
+                <div className="flex justify-center">
+                  <div className="aspect-[382/582] h-auto w-full max-w-[382px] overflow-hidden rounded shadow-lg">
+                    {movie.file?.url ? (
+                      <img
+                        src={getImageUrl(movie.file.url)}
+                        alt={movie.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-mauve-dark-3 text-mauve-11">
+                        <span>Imagem não disponível</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="font-montserratSemibold flex flex-col text-center text-white">
+                  <h1 className="text-2xl leading-tight">{movie.title}</h1>
+                  <p className="font-montserratMedium text-base opacity-90">
+                    Título original: {movie.originalTitle}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                  <InfoCard
+                    title="Popularidade"
+                    value={movie.popularity.toLocaleString()}
+                  />
+                  <InfoCard
+                    title="Votos"
+                    value={movie.votes.toLocaleString()}
+                  />
+                  <div className="col-span-2 flex justify-center">
+                    <CircularRating
+                      percentage={movie.ratingPercentage}
+                      size={98}
+                    />
+                  </div>
+                </div>
+
+                <div className="font-montserratMedium flex items-center justify-center p-4 text-white">
+                  <p className="break-words text-center text-base italic">{`"${movie.tagline}"`}</p>
+                </div>
+
+                <SynopsisCard title="Sinopse" content={movie.description} />
+
+                <GenresSection
+                  title="Gêneros"
+                  genres={movie.genres || []}
+                  className="rounded bg-[#23222599] p-4"
+                />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <InfoCard
+                    title="Lançamento"
+                    value={formatDate(movie.releaseDate)}
+                  />
+                  <InfoCard
+                    title="Duração"
+                    value={formatDuration(movie.duration)}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <InfoCard
+                    title="Situação"
+                    value={getStatusLabel(movie.status)}
+                  />
+                  <InfoCard
+                    title="Idioma"
+                    value={getLanguageLabel(movie.language)}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <InfoCard
+                    title="Orçamento"
+                    value={formatCurrency(movie.budget)}
+                    className="px-4"
+                  />
+                  <InfoCard
+                    title="Receita"
+                    value={formatCurrency(movie.revenue)}
+                    className="px-4"
+                  />
+                  <InfoCard
+                    title="Lucro"
+                    value={formatCurrency(movie.revenue - movie.budget)}
+                    className="px-4"
+                  />
                 </div>
               </div>
             </div>
