@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import './globals.css'
 import { LoadFonts } from '@/utils/fonts'
 
@@ -8,9 +9,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <title>Frontend</title>
+      <title>Cubos Movies</title>
       <LoadFonts />
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   )
 }

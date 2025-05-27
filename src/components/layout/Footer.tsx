@@ -1,10 +1,26 @@
+'use client'
+
+import { useTheme } from '@/contexts/ThemeContext'
+
 export function Footer() {
+  const { theme } = useTheme()
+
   return (
-    <footer className="flex items-center justify-center border-t border-mauve-dark-alpha-6 px-6 py-6">
-      <div className="max-w-[1366px]">
-        <p className="font-montserratMedium text-mauve-dark-11">
-          <span>2025 © Todos os direitos reservados a </span>
-          <span className="font-montserratExtrabold">Cubos Movies</span>
+    <footer
+      className={`border-t px-5 py-5 text-center ${
+        theme === 'dark'
+          ? 'border-mauve-dark-alpha-6 bg-transparent'
+          : 'border-mauve-3 bg-white'
+      }`}
+    >
+      <div className="mx-auto max-w-[1366px]">
+        <p
+          className={`text-base font-normal ${
+            theme === 'dark' ? 'text-mauve-11' : 'text-mauve-dark-1'
+          }`}
+        >
+          2025 © Todos os direitos reservados a{' '}
+          <strong className="font-semibold">Cubos Movies</strong>
         </p>
       </div>
     </footer>
