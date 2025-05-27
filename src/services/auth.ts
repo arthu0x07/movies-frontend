@@ -17,8 +17,8 @@ export async function signIn({ email, password }: SignInCredentials) {
   // We are setting token in localStorage (fallback for client-side)
   localStorage.setItem('@cubos-movies:token', token)
 
-  //  We are setting HTTP-only cookie (more secure main strategy)
-  document.cookie = `@cubos-movies:token=${token}; path=/; HttpOnly; SameSite=Strict; max-age=${7 * 24 * 60 * 60}` // 7 days
+  //  We are setting cookie (client-side accessible)
+  document.cookie = `@cubos-movies:token=${token}; path=/; SameSite=Strict; max-age=${7 * 24 * 60 * 60}` // 7 days
 
   return response.data
 }

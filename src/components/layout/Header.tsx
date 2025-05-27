@@ -2,6 +2,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '../ui/Button'
@@ -9,6 +10,9 @@ import { Button } from '../ui/Button'
 export function Header() {
   const { theme, toggleTheme } = useTheme()
   const { isAuthenticated, signOut } = useAuth()
+
+  // Define where logo should redirect based on auth status
+  const logoHref = isAuthenticated ? '/movies' : '/'
 
   return (
     <header
@@ -19,7 +23,10 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-[1440px] items-center justify-between">
-        <div className="flex items-center gap-4">
+        <Link
+          href={logoHref}
+          className="flex items-center gap-4 transition-opacity hover:opacity-80"
+        >
           <Image
             src={theme === 'dark' ? '/logo.svg' : '/logo-dark.svg'}
             alt="Cubos Movies"
@@ -35,7 +42,7 @@ export function Header() {
           >
             Movies
           </span>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-1.5">
           <Button variant="secondary" onClick={toggleTheme}>
