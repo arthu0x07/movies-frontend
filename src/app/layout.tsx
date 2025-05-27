@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { AuthProvider } from '@/contexts/AuthContext'
 import './globals.css'
 import { LoadFonts } from '@/utils/fonts'
 
@@ -12,7 +13,9 @@ export default function RootLayout({
       <title>Cubos Movies</title>
       <LoadFonts />
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

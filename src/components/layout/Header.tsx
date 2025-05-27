@@ -3,10 +3,12 @@
 
 import Image from 'next/image'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '../ui/Button'
 
 export function Header() {
   const { theme, toggleTheme } = useTheme()
+  const { isAuthenticated, signOut } = useAuth()
 
   return (
     <header
@@ -54,7 +56,7 @@ export function Header() {
             )}
           </Button>
 
-          <Button>Logout</Button>
+          {isAuthenticated && <Button onClick={signOut}>Logout</Button>}
         </div>
       </div>
     </header>
