@@ -11,7 +11,9 @@ const config: Config = {
       fontFamily: {
         montserratExtrabold: ['var(--font-montserrat-extrabold)'],
         montserratSemibold: ['var(--font-montserrat-semibold)'],
+        montserratBold: ['var(--font-montserrat-bold)'],
         montserratMedium: ['var(--font-montserrat-medium)'],
+        montserratRegular: ['var(--font-montserrat-regular)'],
         robotoRegular: ['var(--font-roboto-regular)'],
         robotoBold: ['var(--font-roboto-bold)'],
       },
@@ -64,6 +66,7 @@ const config: Config = {
           10: '#BC6FFFCC',
           11: '#D19DFF',
           12: '#F1DDFFF9',
+          13: '#B744F714 ',
         },
         purple: {
           1: '#FEFCFE',
@@ -148,6 +151,9 @@ const config: Config = {
           10: '#967CB7',
           11: '#6F518C',
           12: '#2C1439',
+        },
+        'custom-purple': {
+          1: '#F1DDFFFA',
         },
       },
       backgroundImage: {

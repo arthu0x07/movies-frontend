@@ -8,10 +8,22 @@ export const montserratExtrabold = Montserrat({
   variable: '--font-montserrat-extrabold',
 })
 
+export const montserratBold = Montserrat({
+  subsets: ['latin'],
+  weight: ['700'], // Bold
+  variable: '--font-montserrat-bold',
+})
+
 export const montserratSemibold = Montserrat({
   subsets: ['latin'],
   weight: ['600'], // Semibold
   variable: '--font-montserrat-semibold',
+})
+
+export const montserratMedium = Montserrat({
+  subsets: ['latin'],
+  weight: ['500'], // Medium
+  variable: '--font-montserrat-medium',
 })
 
 export const montserratRegular = Montserrat({
@@ -38,10 +50,12 @@ export function LoadFonts() {
       {`
         :root {
           --font-montserrat-extrabold: ${montserratExtrabold.style.fontFamily};
+          --font-montserrat-semibold: ${montserratSemibold.style.fontFamily};
+          --font-montserrat-medium: ${montserratMedium.style.fontFamily};
+          --font-montserrat-bold: ${montserratBold.style.fontFamily};
           --font-montserrat-regular: ${montserratRegular.style.fontFamily};
           --font-roboto-regular: ${robotoRegular.style.fontFamily};
           --font-roboto-bold: ${robotoBold.style.fontFamily};
-          --font-montserrat-semibold: ${montserratSemibold.style.fontFamily};
         }
       `}
     </style>
