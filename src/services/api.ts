@@ -31,6 +31,11 @@ api.interceptors.response.use(
   }
 )
 
+export interface Genre {
+  id: string
+  name: string
+}
+
 export interface Movie {
   id: string
   title: string
@@ -52,6 +57,7 @@ export interface Movie {
     id: string
     url: string
   }
+  genres: Genre[]
 }
 
 interface PaginatedResponse<T> {

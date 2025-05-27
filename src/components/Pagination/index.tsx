@@ -18,7 +18,7 @@ export function Pagination({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`flex h-11 w-16 items-center justify-start gap-3 overflow-hidden rounded px-5 py-3 disabled:opacity-50 ${
+        className={`flex h-11 w-16 items-center justify-start gap-3 overflow-hidden rounded px-5 py-3 ${
           theme === 'dark'
             ? 'bg-mauve-dark-alpha-3 text-mauve-12'
             : 'bg-mauve-3 text-mauve-dark-1'

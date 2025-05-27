@@ -19,7 +19,7 @@ export default function MoviesPage() {
     page,
     totalPages,
     handleSearch,
-    handlePageChange,
+    handlePageChange
   } = useMovies()
 
   const { theme } = useTheme()
@@ -35,8 +35,8 @@ export default function MoviesPage() {
         <Header />
 
         <main className="mx-auto flex w-full max-w-[1366px] flex-1 flex-col px-4">
-          <div className="flex items-center justify-end gap-2.5 py-6">
-            <div className="relative max-w-[488px] flex-1">
+          <div className="flex items-center justify-end gap-2.5 py-6 max-md:flex-col max-md:gap-4">
+            <div className="relative max-w-[488px] flex-1 max-md:w-full max-md:max-w-none">
               <Input
                 placeholder="Pesquise por filmes"
                 onChange={(e) => handleSearch(e.target.value)}
@@ -53,22 +53,24 @@ export default function MoviesPage() {
               </div>
             </div>
 
-            <Button
-              variant="secondary"
-              className={
-                theme === 'dark' ? 'text-mauve-1' : 'text-mauve-dark-1'
-              }
-            >
-              <span>Filtros</span>
-            </Button>
+            <div className="flex gap-2.5 max-md:w-full">
+              <Button
+                variant="secondary"
+                className={`max-md:flex-[30%] ${
+                  theme === 'dark' ? 'text-mauve-1' : 'text-mauve-dark-1'
+                }`}
+              >
+                <span>Filtros</span>
+              </Button>
 
-            <Button>
-              <span>Adicionar Filme</span>
-            </Button>
+              <Button className="max-md:flex-[70%]">
+                <span>Adicionar Filme</span>
+              </Button>
+            </div>
           </div>
 
           <div
-            className={`mb-4 flex min-h-[400px] flex-wrap items-center justify-center gap-4 rounded-md p-4 ${
+            className={`mb-4 flex min-h-[400px] flex-wrap items-center justify-center gap-6 rounded-md p-4 ${
               theme === 'dark' ? 'bg-mauve-dark-3' : 'bg-mauve-3'
             }`}
           >
@@ -102,6 +104,7 @@ export default function MoviesPage() {
                   key={movie.id}
                   title={movie.title}
                   posterUrl={movie.file?.url}
+                  genres={movie.genres}
                 />
               ))
             )}
