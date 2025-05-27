@@ -11,6 +11,7 @@ import { signIn } from '@/services/auth'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { AxiosError } from 'axios'
+import Link from 'next/link'
 
 const loginFormSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -108,6 +109,26 @@ export function LoginForm() {
         >
           {isSubmitting ? 'Entrando...' : 'Entrar'}
         </Button>
+      </div>
+
+      <div className="mt-4 text-center">
+        <span
+          className={`font-robotoRegular text-sm ${
+            theme === 'dark' ? 'text-mauve-11' : 'text-mauve-9'
+          }`}
+        >
+          Não tem uma conta?
+        </span>
+        <Link
+          href="/register"
+          className={`font-robotoRegular text-sm underline transition-colors ${
+            theme === 'dark'
+              ? 'text-purple-11 hover:text-purple-12'
+              : 'text-purple-9 hover:text-purple-10'
+          }`}
+        >
+          Criar conta
+        </Link>
       </div>
     </form>
   )
