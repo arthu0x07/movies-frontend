@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { Movie, getMovies } from '@/services/api'
+import { MovieFilters } from '@/components/FiltersModal'
 
 interface UseMoviesParams {
   initialPage?: number
@@ -19,19 +20,54 @@ export function useMovies({
   const [perPage] = useState(initialPerPage)
   const [totalPages, setTotalPages] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
+  const [filters, setFilters] = useState<MovieFilters>({})
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery])
 
   const fetchMovies = useCallback(async () => {
     try {
       setIsLoading(true)
       setError(null)
 
-      const response = await getMovies({
+      const params: any = {
         page,
         perPage,
-        title: searchQuery || undefined,
-      })
+        title: debouncedSearchQuery || undefined,
+        status: filters.status || undefined,
+        language: filters.language || undefined,
+        releaseDateStart: filters.releaseDateStart || undefined,
+        releaseDateEnd: filters.releaseDateEnd || undefined,
+      }
 
-      setMovies(response.data)
+      if (filters.genreIds && filters.genreIds.length > 0) {
+        params.genreIds = filters.genreIds
+      }
+
+      const response = await getMovies(params)
+
+      let filteredMovies = response.data
+      if (
+        filters.durationMin !== undefined ||
+        filters.durationMax !== undefined
+      ) {
+        filteredMovies = response.data.filter((movie) => {
+          const duration = movie.duration
+          const minOk =
+            filters.durationMin === undefined || duration >= filters.durationMin
+          const maxOk =
+            filters.durationMax === undefined || duration <= filters.durationMax
+          return minOk && maxOk
+        })
+      }
+
+      setMovies(filteredMovies)
       setTotalPages(response.meta.totalPages)
     } catch (err) {
       setError('Erro ao carregar filmes')
@@ -39,7 +75,7 @@ export function useMovies({
     } finally {
       setIsLoading(false)
     }
-  }, [page, perPage, searchQuery])
+  }, [page, perPage, debouncedSearchQuery, filters])
 
   useEffect(() => {
     fetchMovies()
@@ -54,6 +90,11 @@ export function useMovies({
     setPage(newPage)
   }, [])
 
+  const handleFiltersChange = useCallback((newFilters: MovieFilters) => {
+    setFilters(newFilters)
+    setPage(1)
+  }, [])
+
   return {
     movies,
     isLoading,
@@ -61,7 +102,9 @@ export function useMovies({
     page,
     totalPages,
     searchQuery,
+    filters,
     handleSearch,
     handlePageChange,
+    handleFiltersChange,
   }
 }

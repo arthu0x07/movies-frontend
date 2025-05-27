@@ -1,5 +1,10 @@
+'use client'
+
+import { useState } from 'react'
 import { getImageUrl } from '@/utils/imageUrl'
 import { Genre } from '@/services/api'
+import Image from 'next/image'
+import { useTheme } from '@/contexts/ThemeContext'
 
 interface MovieCardProps {
   title: string
@@ -12,18 +17,55 @@ export function MovieCard({
   title,
   posterUrl,
   genres,
-  onClick
+  onClick,
 }: MovieCardProps) {
+  const [imageError, setImageError] = useState(false)
+  const { theme } = useTheme()
+
+  const handleImageError = () => {
+    setImageError(true)
+  }
+
   return (
     <button
       onClick={onClick}
       className="group relative flex h-[281px] w-[183px] flex-shrink-0 flex-col overflow-hidden rounded-md transition-transform duration-200 hover:scale-105 sm:h-[355px] sm:w-[235px]"
     >
-      <img
-        src={getImageUrl(posterUrl)}
-        alt={title}
-        className="h-full w-full object-cover shadow-sm"
-      />
+      {!imageError ? (
+        <img
+          src={getImageUrl(posterUrl)}
+          alt={title}
+          className="h-full w-full object-cover shadow-sm"
+          onError={handleImageError}
+        />
+      ) : (
+        <div
+          className={`flex h-full w-full flex-col items-center justify-center shadow-sm ${
+            theme === 'dark'
+              ? 'bg-mauve-dark-3 text-mauve-11'
+              : 'bg-mauve-3 text-mauve-9'
+          }`}
+        >
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="mb-2"
+          >
+            <path
+              d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span className="text-center text-sm font-medium">
+            Imagem não disponível
+          </span>
+        </div>
+      )}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
       <div className="absolute bottom-0 flex w-full flex-col justify-end px-4 pb-4 transition-all duration-200 group-hover:pb-6">
         <h3 className="text-left text-base font-semibold uppercase text-white transition-transform duration-200 group-hover:-translate-y-2">

@@ -9,7 +9,7 @@ interface PaginationProps {
 export function Pagination({
   currentPage,
   totalPages,
-  onPageChange
+  onPageChange,
 }: PaginationProps) {
   const { theme } = useTheme()
 
@@ -34,7 +34,9 @@ export function Pagination({
           <path
             d="M15 18L9 12L15 6"
             className={
-              theme === 'dark' ? 'stroke-mauve-12' : 'stroke-mauve-dark-1'
+              theme === 'dark'
+                ? 'stroke-mauve-dark-alpha-9'
+                : 'stroke-mauve-dark-1'
             }
             strokeWidth="2"
             strokeLinecap="round"
@@ -57,7 +59,7 @@ export function Pagination({
                   ? 'bg-purple-9 text-white'
                   : 'bg-mauve-dark-1 text-white'
                 : theme === 'dark'
-                  ? 'bg-mauve-dark-alpha-3 text-mauve-12'
+                  ? 'bg-mauve-dark-alpha-3 text-mauve-dark-alpha-9'
                   : 'bg-mauve-3 text-mauve-dark-1'
             }`}
           >

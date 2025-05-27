@@ -1,11 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { MovieCard } from '@/components/MovieCard'
 import { Pagination } from '@/components/Pagination'
 import { Input } from '@/components/ui/Input'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { FiltersModal } from '@/components/FiltersModal'
 import { useMovies } from '@/hooks/useMovies'
 import { useTheme } from '@/contexts/ThemeContext'
 import Image from 'next/image'
@@ -18,11 +20,14 @@ export default function MoviesPage() {
     error,
     page,
     totalPages,
+    filters,
     handleSearch,
-    handlePageChange
+    handlePageChange,
+    handleFiltersChange,
   } = useMovies()
 
   const { theme } = useTheme()
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false)
 
   return (
     <div
@@ -59,6 +64,7 @@ export default function MoviesPage() {
                 className={`max-md:flex-[30%] ${
                   theme === 'dark' ? 'text-mauve-1' : 'text-mauve-dark-1'
                 }`}
+                onClick={() => setIsFiltersModalOpen(true)}
               >
                 <span>Filtros</span>
               </Button>
@@ -121,6 +127,13 @@ export default function MoviesPage() {
 
         <Footer />
       </div>
+
+      <FiltersModal
+        isOpen={isFiltersModalOpen}
+        onClose={() => setIsFiltersModalOpen(false)}
+        onApplyFilters={handleFiltersChange}
+        currentFilters={filters}
+      />
     </div>
   )
 }

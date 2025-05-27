@@ -2,6 +2,9 @@ import axios from 'axios'
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+  paramsSerializer: {
+    indexes: null, // this will remove array indexes (genreIds[] becomes genreIds)
+  },
 })
 
 api.interceptors.request.use(
@@ -16,7 +19,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 api.interceptors.response.use(
@@ -24,11 +27,12 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('@cubos-movies:token')
-      document.cookie = '@cubos-movies:token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      document.cookie =
+        '@cubos-movies:token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
       window.location.href = '/login'
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 export interface Genre {
@@ -44,7 +48,7 @@ export interface Movie {
   tagline: string
   releaseDate: string
   duration: number
-  status: 'RELEASED' | 'UPCOMING' | 'CANCELLED'
+  status: 'RELEASED' | 'IN_PRODUCTION' | 'PLANNED' | 'CANCELLED'
   language: 'PT' | 'EN' | 'ES'
   budget: number
   revenue: number
@@ -73,7 +77,7 @@ interface PaginatedResponse<T> {
 
 interface GetMoviesParams {
   title?: string
-  status?: 'RELEASED' | 'UPCOMING' | 'CANCELLED'
+  status?: 'RELEASED' | 'IN_PRODUCTION' | 'PLANNED' | 'CANCELLED'
   language?: 'PT' | 'EN' | 'ES'
   genreIds?: string[]
   releaseDateStart?: string
@@ -110,4 +114,28 @@ export async function updateMovie(id: string, movie: Partial<Movie>) {
 
 export async function deleteMovie(id: string) {
   await api.delete(`/movies/${id}`)
+}
+
+// Função para buscar gêneros únicos dos filmes
+export async function getUniqueGenres(): Promise<Genre[]> {
+  try {
+    // Busca todos os filmes com um limite alto para pegar todos os gêneros
+    const response = await getMovies({ perPage: 1000 })
+
+    // Extrai gêneros únicos
+    const genresMap = new Map<string, Genre>()
+
+    response.data.forEach((movie) => {
+      movie.genres?.forEach((genre) => {
+        genresMap.set(genre.id, genre)
+      })
+    })
+
+    return Array.from(genresMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )
+  } catch (error) {
+    console.error('Erro ao buscar gêneros:', error)
+    return []
+  }
 }
