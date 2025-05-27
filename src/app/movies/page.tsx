@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { FiltersModal } from '@/components/FiltersModal'
+import { AddMovieModal } from '@/components/AddMovieModal'
 import { useMovies } from '@/hooks/useMovies'
 import { useTheme } from '@/contexts/ThemeContext'
 import Image from 'next/image'
@@ -24,10 +25,16 @@ export default function MoviesPage() {
     handleSearch,
     handlePageChange,
     handleFiltersChange,
+    refetch,
   } = useMovies()
 
   const { theme } = useTheme()
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false)
+  const [isAddMovieModalOpen, setIsAddMovieModalOpen] = useState(false)
+
+  const handleMovieAdded = () => {
+    refetch()
+  }
 
   return (
     <div
@@ -69,7 +76,10 @@ export default function MoviesPage() {
                 <span>Filtros</span>
               </Button>
 
-              <Button className="max-md:flex-[70%]">
+              <Button
+                className="max-md:flex-[70%]"
+                onClick={() => setIsAddMovieModalOpen(true)}
+              >
                 <span>Adicionar Filme</span>
               </Button>
             </div>
@@ -133,6 +143,12 @@ export default function MoviesPage() {
         onClose={() => setIsFiltersModalOpen(false)}
         onApplyFilters={handleFiltersChange}
         currentFilters={filters}
+      />
+
+      <AddMovieModal
+        isOpen={isAddMovieModalOpen}
+        onClose={() => setIsAddMovieModalOpen(false)}
+        onMovieAdded={handleMovieAdded}
       />
     </div>
   )

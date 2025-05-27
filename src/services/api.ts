@@ -64,6 +64,24 @@ export interface Movie {
   genres: Genre[]
 }
 
+export interface CreateMovieData {
+  title: string
+  originalTitle: string
+  description: string
+  tagline: string
+  releaseDate: string
+  duration: number
+  status: 'RELEASED' | 'IN_PRODUCTION' | 'PLANNED' | 'CANCELLED'
+  language: 'PT' | 'EN' | 'ES'
+  budget: number
+  revenue: number
+  popularity: number
+  votes: number
+  ratingPercentage: number
+  genresIds: string[]
+  fileId?: string
+}
+
 interface PaginatedResponse<T> {
   data: T[]
   meta: {
@@ -100,8 +118,8 @@ export async function getMovieBySlug(slug: string) {
   return data.data
 }
 
-export async function createMovie(movie: Omit<Movie, 'id'>) {
-  const { data } = await api.post<{ data: Movie }>('/movies', movie)
+export async function createMovie(movieData: CreateMovieData) {
+  const { data } = await api.post<{ data: Movie }>('/movies', movieData)
 
   return data.data
 }
@@ -116,13 +134,28 @@ export async function deleteMovie(id: string) {
   await api.delete(`/movies/${id}`)
 }
 
-// Função para buscar gêneros únicos dos filmes
+export async function uploadFile(file: File): Promise<{ fileId: string }> {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const { data } = await api.post<{ data: { fileId: string } }>(
+    '/upload',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  )
+
+  return data.data
+}
+
+// Função para buscar gêneros únicos dos filmes - Vou remover quando criar um endpoint para retornar os gêneros apenas.
 export async function getUniqueGenres(): Promise<Genre[]> {
   try {
-    // Busca todos os filmes com um limite alto para pegar todos os gêneros
     const response = await getMovies({ perPage: 1000 })
 
-    // Extrai gêneros únicos
     const genresMap = new Map<string, Genre>()
 
     response.data.forEach((movie) => {

@@ -95,6 +95,10 @@ export function useMovies({
     setPage(1)
   }, [])
 
+  const refetch = useCallback(() => {
+    fetchMovies()
+  }, [fetchMovies])
+
   return {
     movies,
     isLoading,
@@ -106,5 +110,6 @@ export function useMovies({
     handleSearch,
     handlePageChange,
     handleFiltersChange,
+    refetch,
   }
 }
