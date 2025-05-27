@@ -24,7 +24,9 @@ export default function RegisterPage() {
           <div className="w-full max-w-[382px]">
             <div
               className={`rounded-md p-4 ${
-                theme === 'dark' ? 'bg-mauve-dark-3' : 'bg-mauve-3'
+                theme === 'dark'
+                  ? 'bg-mauve-dark-3'
+                  : 'border border-mauve-4 bg-white shadow-lg'
               }`}
             >
               <div className="mb-6 text-center">

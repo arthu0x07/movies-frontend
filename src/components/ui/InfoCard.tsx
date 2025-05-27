@@ -1,3 +1,5 @@
+import { useTheme } from '@/contexts/ThemeContext'
+
 interface InfoCardProps {
   title: string
   value: string
@@ -5,14 +7,28 @@ interface InfoCardProps {
 }
 
 export function InfoCard({ title, value, className = '' }: InfoCardProps) {
+  const { theme } = useTheme()
+
   return (
     <div
-      className={`min-w-0 rounded bg-[#232225bf] p-4 max-md:p-3 ${className}`}
+      className={`min-w-0 rounded p-4 max-md:p-3 ${
+        theme === 'dark'
+          ? 'bg-[#232225bf]'
+          : 'border border-mauve-4 bg-white/90 shadow-sm'
+      } ${className}`}
     >
-      <div className="break-words text-left font-montserratExtrabold text-md uppercase text-[#b5b2bc] max-md:text-sm">
+      <div
+        className={`font-montserratExtrabold break-words text-left text-md uppercase max-md:text-sm ${
+          theme === 'dark' ? 'text-[#b5b2bc]' : 'text-mauve-9'
+        }`}
+      >
         {title}
       </div>
-      <div className="font-montserratSemibold mt-2 break-words text-left text-lg text-[#ffffff] max-md:text-base">
+      <div
+        className={`font-montserratSemibold mt-2 break-words text-left text-lg max-md:text-base ${
+          theme === 'dark' ? 'text-[#ffffff]' : 'text-mauve-dark-1'
+        }`}
+      >
         {value}
       </div>
     </div>

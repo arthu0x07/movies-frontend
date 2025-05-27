@@ -46,7 +46,7 @@ export default function MoviesPage() {
       <div className="relative z-10 flex min-h-screen flex-col">
         <Header />
 
-        <main className="mx-auto flex w-full max-w-[1366px] flex-1 flex-col px-4">
+        <main className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-4">
           <div className="flex items-center justify-end gap-2.5 py-6 max-md:flex-col max-md:gap-4">
             <div className="relative max-w-[488px] flex-1 max-md:w-full max-md:max-w-none">
               <Input
@@ -87,7 +87,9 @@ export default function MoviesPage() {
 
           <div
             className={`mb-4 flex min-h-[400px] flex-wrap items-center justify-center gap-6 rounded-md p-4 ${
-              theme === 'dark' ? 'bg-mauve-dark-3' : 'bg-mauve-3'
+              theme === 'dark'
+                ? 'bg-mauve-dark-3'
+                : 'border border-mauve-4 bg-mauve-2'
             }`}
           >
             {isLoading ? (

@@ -10,10 +10,10 @@ export function Footer() {
       className={`border-t px-5 py-5 text-center ${
         theme === 'dark'
           ? 'border-mauve-dark-alpha-6 bg-transparent'
-          : 'border-mauve-3 bg-white'
+          : 'border-mauve-4 bg-white/95 shadow-sm'
       }`}
     >
-      <div className="mx-auto max-w-[1366px]">
+      <div className="mx-auto max-w-[1440px]">
         <p
           className={`text-base font-normal ${
             theme === 'dark' ? 'text-mauve-11' : 'text-mauve-dark-1'

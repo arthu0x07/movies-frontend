@@ -15,10 +15,10 @@ export function Header() {
       className={`border-b px-4 py-3 backdrop-blur-sm ${
         theme === 'dark'
           ? 'border-mauve-dark-alpha-6 bg-mauve-dark-1/90'
-          : 'border-mauve-3 bg-white'
+          : 'border-mauve-4 bg-white/95 shadow-sm'
       }`}
     >
-      <div className="mx-auto flex max-w-[1366px] items-center justify-between">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between">
         <div className="flex items-center gap-4">
           <Image
             src={theme === 'dark' ? '/logo.svg' : '/logo-dark.svg'}

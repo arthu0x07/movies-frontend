@@ -68,12 +68,8 @@ export default function MovieDetailsPage() {
   }
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value)
+    const millions = value / 1000000
+    return `${millions.toFixed(2)}M`
   }
 
   const formatDuration = (minutes: number) => {
@@ -163,9 +159,9 @@ export default function MovieDetailsPage() {
       <div className="relative z-20 flex min-h-screen flex-col">
         <Header />
 
-        <main className="mx-auto mt-8 flex w-full max-w-[1366px] flex-1 flex-col pb-2">
+        <main className="mx-auto mt-8 flex w-full max-w-[1440px] flex-1 flex-col pb-2">
           <div className="relative overflow-hidden px-8 pt-8 max-sm:px-4">
-            <div className="absolute right-0 top-0 z-10 h-[603px] w-[1448px] max-w-none">
+            <div className="absolute right-0 top-0 z-10 h-[603px] w-full max-w-none">
               <img
                 src={
                   movie.file?.url
@@ -179,13 +175,19 @@ export default function MovieDetailsPage() {
                 className="absolute inset-0"
                 style={{
                   background:
-                    'linear-gradient(270deg, rgba(18, 17, 19, 0.9) 0%, rgba(18, 17, 19, 0.7) 30%, rgba(18, 17, 19, 0.5) 70%, rgba(18, 17, 19, 0.7) 100%)',
+                    theme === 'dark'
+                      ? 'linear-gradient(270deg, rgba(18, 17, 19, 0.9) 0%, rgba(18, 17, 19, 0.7) 30%, rgba(18, 17, 19, 0.5) 70%, rgba(18, 17, 19, 0.7) 100%)'
+                      : 'linear-gradient(270deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 30%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0.85) 100%)',
                 }}
               />
             </div>
 
             <div className="relative z-30 mb-4 flex min-h-[59px] w-full items-center justify-between gap-4 max-sm:justify-center">
-              <div className="font-montserratSemibold flex flex-col text-white max-sm:hidden">
+              <div
+                className={`font-montserratSemibold flex flex-col max-sm:hidden ${
+                  theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+                }`}
+              >
                 <h1 className="text-[32px] leading-tight max-lg:text-[28px] max-md:text-[24px]">
                   {movie.title}
                 </h1>
@@ -232,7 +234,11 @@ export default function MovieDetailsPage() {
 
                 <div className="grid grid-cols-[minmax(300px,1fr)_minmax(280px,320px)] gap-6">
                   <div className="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4">
-                    <div className="font-montserratMedium flex items-center justify-center text-white">
+                    <div
+                      className={`font-montserratMedium flex items-center justify-center ${
+                        theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+                      }`}
+                    >
                       <p className="break-words text-left text-base italic">{`"${movie.tagline}"`}</p>
                     </div>
 
@@ -246,7 +252,7 @@ export default function MovieDetailsPage() {
                     <GenresSection
                       title="Gêneros"
                       genres={movie.genres || []}
-                      className="max-w-fit rounded bg-[#23222599] p-4"
+                      className="max-w-fit rounded p-4"
                     />
                   </div>
 
@@ -392,7 +398,11 @@ export default function MovieDetailsPage() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
-                  <div className="font-montserratMedium flex items-center justify-center text-white">
+                  <div
+                    className={`font-montserratMedium flex items-center justify-center ${
+                      theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+                    }`}
+                  >
                     <p className="break-words text-center text-base italic max-lg:text-sm">{`"${movie.tagline}"`}</p>
                   </div>
 
@@ -401,7 +411,7 @@ export default function MovieDetailsPage() {
                   <GenresSection
                     title="Gêneros"
                     genres={movie.genres || []}
-                    className="rounded bg-[#23222599] p-4 max-lg:p-3"
+                    className="rounded p-4 max-lg:p-3"
                   />
                 </div>
               </div>
@@ -423,7 +433,11 @@ export default function MovieDetailsPage() {
                   </div>
                 </div>
 
-                <div className="font-montserratSemibold flex flex-col text-center text-white">
+                <div
+                  className={`font-montserratSemibold flex flex-col text-center ${
+                    theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+                  }`}
+                >
                   <h1 className="text-2xl leading-tight">{movie.title}</h1>
                   <p className="font-montserratMedium text-base opacity-90">
                     Título original: {movie.originalTitle}
@@ -447,7 +461,11 @@ export default function MovieDetailsPage() {
                   </div>
                 </div>
 
-                <div className="font-montserratMedium flex items-center justify-center p-4 text-white">
+                <div
+                  className={`font-montserratMedium flex items-center justify-center p-4 ${
+                    theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+                  }`}
+                >
                   <p className="break-words text-center text-base italic">{`"${movie.tagline}"`}</p>
                 </div>
 
@@ -456,7 +474,7 @@ export default function MovieDetailsPage() {
                 <GenresSection
                   title="Gêneros"
                   genres={movie.genres || []}
-                  className="rounded bg-[#23222599] p-4"
+                  className="rounded p-4"
                 />
 
                 <div className="grid grid-cols-2 gap-4">

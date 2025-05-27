@@ -41,7 +41,9 @@ export default function HomePage() {
             <div className="w-full max-w-[500px] text-center">
               <div
                 className={`rounded-md p-8 ${
-                  theme === 'dark' ? 'bg-mauve-dark-3' : 'bg-mauve-3'
+                  theme === 'dark'
+                    ? 'bg-mauve-dark-3'
+                    : 'border border-mauve-4 bg-white shadow-lg'
                 }`}
               >
                 <div className="mb-8">
