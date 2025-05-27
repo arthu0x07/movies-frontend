@@ -3,7 +3,7 @@
 
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { RegisterForm } from '@/app/register/components/RegisterForm'
+import { RegisterForm } from '@/components/forms/RegisterForm'
 import { Background } from '@/components/Background'
 import { useTheme } from '@/contexts/ThemeContext'
 

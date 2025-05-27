@@ -1,37 +1,10 @@
 import { api } from './api'
-
-interface SignInCredentials {
-  email: string
-  password: string
-}
-
-interface SignUpCredentials {
-  name: string
-  email: string
-  password: string
-}
-
-interface SignInResponse {
-  data: {
-    token: string
-  }
-  meta: {
-    timestamp: string
-    path: string
-  }
-}
-
-interface SignUpResponse {
-  data: {
-    id: string
-    name: string
-    email: string
-  }
-  meta: {
-    timestamp: string
-    path: string
-  }
-}
+import {
+  SignInCredentials,
+  SignUpCredentials,
+  SignInResponse,
+  SignUpResponse,
+} from '@/@types/auth'
 
 export async function signIn({ email, password }: SignInCredentials) {
   const response = await api.post<SignInResponse>('/authenticate', {
@@ -41,9 +14,11 @@ export async function signIn({ email, password }: SignInCredentials) {
 
   const { token } = response.data.data
 
+  // We are setting token in localStorage (fallback for client-side)
   localStorage.setItem('@cubos-movies:token', token)
 
-  document.cookie = `@cubos-movies:token=${token}; path=/`
+  //  We are setting HTTP-only cookie (more secure main strategy)
+  document.cookie = `@cubos-movies:token=${token}; path=/; HttpOnly; SameSite=Strict; max-age=${7 * 24 * 60 * 60}` // 7 days
 
   return response.data
 }

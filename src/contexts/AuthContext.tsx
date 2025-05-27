@@ -6,7 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useState,
+  useState
 } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -32,6 +32,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   const signOut = useCallback(() => {
+    // We are removing token from localStorage and cookie
     localStorage.removeItem('@cubos-movies:token')
     document.cookie =
       '@cubos-movies:token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'

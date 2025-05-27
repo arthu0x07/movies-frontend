@@ -1,9 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { LoginForm } from '@/app/login/components/LoginForm'
+import { LoginForm } from '@/components/forms/LoginForm'
 import { Background } from '@/components/Background'
 import { useTheme } from '@/contexts/ThemeContext'
 
