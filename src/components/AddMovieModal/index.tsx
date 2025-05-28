@@ -7,8 +7,13 @@ import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
 import { FileUpload } from '@/components/ui/FileUpload'
 import { useTheme } from '@/contexts/ThemeContext'
-import { createMovie, uploadFile, getUniqueGenres } from '@/services/api'
-import { Genre, CreateMovieData } from '@/@types/movie'
+import { useGenres } from '@/contexts/GenresContext'
+import {
+  createMovie,
+  uploadFile,
+  subscribeToMovieNotification
+} from '@/services/api'
+import { CreateMovieData } from '@/@types/movie'
 
 interface AddMovieModalProps {
   isOpen: boolean
@@ -39,6 +44,7 @@ export function AddMovieModal({
   onMovieAdded
 }: AddMovieModalProps) {
   const { theme } = useTheme()
+  const { genres } = useGenres()
   const [formData, setFormData] = useState<FormData>({
     title: '',
     originalTitle: '',
@@ -66,27 +72,12 @@ export function AddMovieModal({
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [genres, setGenres] = useState<Genre[]>([])
-  const [loadingGenres, setLoadingGenres] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
-      loadGenres()
       resetForm()
     }
   }, [isOpen])
-
-  const loadGenres = async () => {
-    setLoadingGenres(true)
-    try {
-      const uniqueGenres = await getUniqueGenres()
-      setGenres(uniqueGenres)
-    } catch (error) {
-      console.error('Erro ao carregar gêneros:', error)
-    } finally {
-      setLoadingGenres(false)
-    }
-  }
 
   const resetForm = () => {
     setFormData({
@@ -299,7 +290,25 @@ export function AddMovieModal({
         bannerFileId
       }
 
-      await createMovie(movieData)
+      const createdMovie = await createMovie(movieData)
+
+      // Check if release date is in the future and subscribe to notifications
+      const releaseDate = new Date(formData.releaseDate + 'T00:00:00.000Z')
+      const today = new Date()
+      const todayUTC = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      )
+
+      if (releaseDate > todayUTC) {
+        try {
+          await subscribeToMovieNotification(createdMovie.id)
+        } catch (error) {
+          console.error('Erro ao inscrever usuário na notificação:', error)
+        }
+      }
+
       onMovieAdded()
       onClose()
     } catch (error: any) {
@@ -513,42 +522,32 @@ export function AddMovieModal({
             Gêneros *
           </label>
 
-          {loadingGenres ? (
-            <div className="mt-2 text-center">
-              <span
-                className={theme === 'dark' ? 'text-mauve-11' : 'text-mauve-9'}
+          <div className="mt-2 grid max-h-32 grid-cols-2 gap-2 overflow-y-auto">
+            {genres.map((genre) => (
+              <label
+                key={genre.id}
+                className={`flex cursor-pointer items-center gap-2 rounded p-2 transition-colors ${
+                  theme === 'dark'
+                    ? 'hover:bg-mauve-dark-alpha-3'
+                    : 'hover:bg-mauve-3'
+                }`}
               >
-                Carregando gêneros...
-              </span>
-            </div>
-          ) : (
-            <div className="mt-2 grid max-h-32 grid-cols-2 gap-2 overflow-y-auto">
-              {genres.map((genre) => (
-                <label
-                  key={genre.id}
-                  className={`flex cursor-pointer items-center gap-2 rounded p-2 transition-colors ${
-                    theme === 'dark'
-                      ? 'hover:bg-mauve-dark-alpha-3'
-                      : 'hover:bg-mauve-3'
+                <input
+                  type="checkbox"
+                  checked={formData.genreIds.includes(genre.id)}
+                  onChange={() => handleGenreToggle(genre.id)}
+                  className="rounded"
+                />
+                <span
+                  className={`text-sm ${
+                    theme === 'dark' ? 'text-mauve-11' : 'text-mauve-dark-1'
                   }`}
                 >
-                  <input
-                    type="checkbox"
-                    checked={formData.genreIds.includes(genre.id)}
-                    onChange={() => handleGenreToggle(genre.id)}
-                    className="rounded"
-                  />
-                  <span
-                    className={`text-sm ${
-                      theme === 'dark' ? 'text-mauve-11' : 'text-mauve-dark-1'
-                    }`}
-                  >
-                    {genre.name}
-                  </span>
-                </label>
-              ))}
-            </div>
-          )}
+                  {genre.name}
+                </span>
+              </label>
+            ))}
+          </div>
 
           {errors.genreIds && (
             <span className="mt-1 text-sm text-red-500">{errors.genreIds}</span>

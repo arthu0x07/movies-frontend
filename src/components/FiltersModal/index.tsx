@@ -6,8 +6,7 @@ import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
 import { useTheme } from '@/contexts/ThemeContext'
-import { getUniqueGenres } from '@/services/api'
-import { Genre } from '@/@types/movie'
+import { useGenres } from '@/contexts/GenresContext'
 
 export interface MovieFilters {
   durationMin?: number
@@ -33,28 +32,14 @@ export function FiltersModal({
   currentFilters
 }: FiltersModalProps) {
   const { theme } = useTheme()
+  const { genres } = useGenres()
   const [filters, setFilters] = useState<MovieFilters>(currentFilters)
-  const [genres, setGenres] = useState<Genre[]>([])
-  const [loadingGenres, setLoadingGenres] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setFilters(currentFilters)
-      loadGenres()
     }
   }, [isOpen, currentFilters])
-
-  const loadGenres = async () => {
-    setLoadingGenres(true)
-    try {
-      const uniqueGenres = await getUniqueGenres()
-      setGenres(uniqueGenres)
-    } catch (error) {
-      console.error('Erro ao carregar gêneros:', error)
-    } finally {
-      setLoadingGenres(false)
-    }
-  }
 
   const handleApply = () => {
     onApplyFilters(filters)
@@ -206,42 +191,32 @@ export function FiltersModal({
             Gêneros
           </label>
 
-          {loadingGenres ? (
-            <div className="mt-2 text-center">
-              <span
-                className={theme === 'dark' ? 'text-mauve-11' : 'text-mauve-9'}
+          <div className="mt-2 grid max-h-32 grid-cols-2 gap-2 overflow-y-auto">
+            {genres.map((genre) => (
+              <label
+                key={genre.id}
+                className={`flex cursor-pointer items-center gap-2 rounded p-2 transition-colors ${
+                  theme === 'dark'
+                    ? 'hover:bg-mauve-dark-alpha-3'
+                    : 'hover:bg-mauve-3'
+                }`}
               >
-                Carregando gêneros...
-              </span>
-            </div>
-          ) : (
-            <div className="mt-2 grid max-h-32 grid-cols-2 gap-2 overflow-y-auto">
-              {genres.map((genre) => (
-                <label
-                  key={genre.id}
-                  className={`flex cursor-pointer items-center gap-2 rounded p-2 transition-colors ${
-                    theme === 'dark'
-                      ? 'hover:bg-mauve-dark-alpha-3'
-                      : 'hover:bg-mauve-3'
+                <input
+                  type="checkbox"
+                  checked={filters.genreIds?.includes(genre.id) || false}
+                  onChange={() => handleGenreToggle(genre.id)}
+                  className="rounded"
+                />
+                <span
+                  className={`text-sm ${
+                    theme === 'dark' ? 'text-mauve-11' : 'text-mauve-dark-1'
                   }`}
                 >
-                  <input
-                    type="checkbox"
-                    checked={filters.genreIds?.includes(genre.id) || false}
-                    onChange={() => handleGenreToggle(genre.id)}
-                    className="rounded"
-                  />
-                  <span
-                    className={`text-sm ${
-                      theme === 'dark' ? 'text-mauve-11' : 'text-mauve-dark-1'
-                    }`}
-                  >
-                    {genre.name}
-                  </span>
-                </label>
-              ))}
-            </div>
-          )}
+                  {genre.name}
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
 
         <div className="flex gap-2 pt-4">

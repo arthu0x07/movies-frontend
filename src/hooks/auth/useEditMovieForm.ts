@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
-import { updateMovie, uploadFile, getUniqueGenres, Genre, subscribeToMovieNotification } from '@/services/api'
+import { updateMovie, uploadFile, subscribeToMovieNotification } from '@/services/api'
 import { Movie, UpdateMovieData } from '@/@types/movie'
+import { useGenres } from '@/contexts/GenresContext'
 import { z } from 'zod'
 
 const editMovieFormSchema = z.object({
@@ -40,8 +41,7 @@ export function useEditMovieForm({ movie, onSuccess, onClose }: UseEditMovieForm
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [genres, setGenres] = useState<Genre[]>([])
-  const [loadingGenres, setLoadingGenres] = useState(false)
+  const { genres: contextGenres } = useGenres()
 
   const form = useForm<EditMovieFormData>({
     resolver: zodResolver(editMovieFormSchema),
@@ -64,22 +64,6 @@ export function useEditMovieForm({ movie, onSuccess, onClose }: UseEditMovieForm
   })
 
   const { handleSubmit, formState: { isValid } } = form
-
-  useEffect(() => {
-    loadGenres()
-  }, [])
-
-  const loadGenres = async () => {
-    setLoadingGenres(true)
-    try {
-      const uniqueGenres = await getUniqueGenres()
-      setGenres(uniqueGenres)
-    } catch (error) {
-      console.error('Erro ao carregar gêneros:', error)
-    } finally {
-      setLoadingGenres(false)
-    }
-  }
 
   const handlePosterFileSelect = (file: File) => {
     setSelectedPosterFile(file)
@@ -242,8 +226,7 @@ export function useEditMovieForm({ movie, onSuccess, onClose }: UseEditMovieForm
     isSubmitting,
     isUploading,
     uploadProgress,
-    genres,
-    loadingGenres,
+    genres: contextGenres,
     selectedPosterFile,
     selectedBannerFile,
     onSubmit,

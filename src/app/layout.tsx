@@ -1,10 +1,11 @@
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { GenresProvider } from '@/contexts/GenresContext'
 import './globals.css'
 import { LoadFonts } from '@/utils/fonts'
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
@@ -14,7 +15,9 @@ export default function RootLayout({
       <LoadFonts />
       <body>
         <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <GenresProvider>{children}</GenresProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
