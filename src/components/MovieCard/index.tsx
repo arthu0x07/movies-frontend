@@ -19,7 +19,7 @@ export function MovieCard({
   posterUrl,
   genres,
   slug,
-  onClick,
+  onClick
 }: MovieCardProps) {
   const [imageError, setImageError] = useState(false)
   const { theme } = useTheme()
@@ -40,7 +40,7 @@ export function MovieCard({
   return (
     <button
       onClick={handleClick}
-      className="group relative flex h-[281px] w-[183px] flex-shrink-0 flex-col overflow-hidden rounded-sm transition-transform duration-200 hover:scale-105 sm:h-[355px] sm:w-[235px]"
+      className="group relative flex aspect-[183/281] w-full min-w-[140px] max-w-[200px] flex-shrink-0 flex-col overflow-hidden rounded-sm transition-transform duration-200 hover:scale-105 min-[480px]:max-w-none sm:aspect-[235/355]"
     >
       {!imageError ? (
         <img
@@ -70,7 +70,7 @@ export function MovieCard({
               fill="currentColor"
             />
           </svg>
-          <span className="font-montserratMedium text-center text-sm">
+          <span className="text-center font-montserratMedium text-sm">
             Imagem não disponível
           </span>
         </div>

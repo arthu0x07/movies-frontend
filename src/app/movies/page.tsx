@@ -86,14 +86,14 @@ export default function MoviesPage() {
           </div>
 
           <div
-            className={`mb-4 flex min-h-[400px] flex-wrap items-center justify-between gap-6 rounded-md p-6 ${
+            className={`mb-4 grid min-h-[400px] grid-cols-2 justify-items-center gap-3 rounded-md p-3 min-[480px]:grid-cols-3 min-[480px]:gap-4 min-[480px]:p-4 sm:gap-6 sm:p-6 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 ${
               theme === 'dark'
                 ? 'bg-mauve-dark-3'
                 : 'border border-mauve-4 bg-mauve-2'
             }`}
           >
             {isLoading ? (
-              <div className="flex items-center justify-center">
+              <div className="col-span-full flex items-center justify-center">
                 <span
                   className={`text-lg ${
                     theme === 'dark' ? 'text-mauve-dark-9' : 'text-mauve-9'
@@ -103,11 +103,11 @@ export default function MoviesPage() {
                 </span>
               </div>
             ) : error ? (
-              <div className="flex items-center justify-center">
+              <div className="col-span-full flex items-center justify-center">
                 <span className="text-lg text-red-500">{error}</span>
               </div>
             ) : movies.length === 0 ? (
-              <div className="flex items-center justify-center">
+              <div className="col-span-full flex items-center justify-center">
                 <span
                   className={`text-lg ${
                     theme === 'dark' ? 'text-mauve-dark-9' : 'text-mauve-9'
