@@ -105,7 +105,6 @@ export function FiltersModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Filtros">
       <div className="space-y-6">
-        {/* Filtros de Duração */}
         <div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
@@ -139,7 +138,6 @@ export function FiltersModal({
           </div>
         </div>
 
-        {/* Filtros de Data de Lançamento */}
         <div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
@@ -167,7 +165,6 @@ export function FiltersModal({
           </div>
         </div>
 
-        {/* Filtros de Status e Idioma */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Select
             label="Status do Filme"
@@ -199,7 +196,6 @@ export function FiltersModal({
           />
         </div>
 
-        {/* Filtro de Gêneros */}
         <div>
           <label
             className={`font-robotoBold text-lg font-bold ${
@@ -247,7 +243,6 @@ export function FiltersModal({
           )}
         </div>
 
-        {/* Botões */}
         <div className="flex gap-2 pt-4">
           <Button variant="secondary" onClick={handleClear} className="flex-1">
             Limpar

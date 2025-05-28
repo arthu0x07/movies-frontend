@@ -25,7 +25,7 @@ export default function MoviesPage() {
     handleSearch,
     handlePageChange,
     handleFiltersChange,
-    refetch,
+    refetch
   } = useMovies()
 
   const { theme } = useTheme()
@@ -121,7 +121,7 @@ export default function MoviesPage() {
                 <MovieCard
                   key={movie.id}
                   title={movie.title}
-                  posterUrl={movie.file?.url}
+                  posterUrl={movie.posterFile?.url}
                   genres={movie.genres}
                   slug={movie.slug}
                 />
