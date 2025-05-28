@@ -68,15 +68,15 @@ export function LoginForm() {
 
       <div className="mt-4 text-center">
         <span
-          className={`font-robotoRegular text-sm ${
+          className={`font-robotoRegular mr-1 text-md ${
             theme === 'dark' ? 'text-mauve-11' : 'text-mauve-9'
           }`}
         >
-          Não tem uma conta?
+          Não tem uma conta? 
         </span>
         <Link
           href="/register"
-          className={`font-robotoRegular text-sm underline transition-colors ${
+          className={`font-robotoRegular text-lg underline transition-colors ${
             theme === 'dark'
               ? 'text-purple-11 hover:text-purple-12'
               : 'text-purple-9 hover:text-purple-10'

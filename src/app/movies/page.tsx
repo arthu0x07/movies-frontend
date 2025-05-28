@@ -86,7 +86,7 @@ export default function MoviesPage() {
           </div>
 
           <div
-            className={`mb-4 flex min-h-[400px] flex-wrap items-center justify-center gap-6 rounded-md p-4 ${
+            className={`mb-4 flex min-h-[400px] flex-wrap items-center justify-between gap-6 rounded-md p-6 ${
               theme === 'dark'
                 ? 'bg-mauve-dark-3'
                 : 'border border-mauve-4 bg-mauve-2'

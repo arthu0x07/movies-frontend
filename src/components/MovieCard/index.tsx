@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getImageUrl } from '@/utils/imageUrl'
-import { Genre } from '@/services/api'
 import { useTheme } from '@/contexts/ThemeContext'
+import { Genre } from '@/@types/movie'
 
 interface MovieCardProps {
   title: string
@@ -40,7 +40,7 @@ export function MovieCard({
   return (
     <button
       onClick={handleClick}
-      className="group relative flex h-[281px] w-[183px] flex-shrink-0 flex-col overflow-hidden rounded-md transition-transform duration-200 hover:scale-105 sm:h-[355px] sm:w-[235px]"
+      className="group relative flex h-[281px] w-[183px] flex-shrink-0 flex-col overflow-hidden rounded-sm transition-transform duration-200 hover:scale-105 sm:h-[355px] sm:w-[235px]"
     >
       {!imageError ? (
         <img
