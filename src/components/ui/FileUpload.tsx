@@ -3,6 +3,7 @@
 import { useState, useRef, DragEvent, ChangeEvent } from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
 import { Button } from './Button'
+import { getImageUrl } from '@/utils/imageUrl'
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void
@@ -13,6 +14,7 @@ interface FileUploadProps {
   accept?: string
   label?: string
   error?: string
+  currentFileUrl?: string
 }
 
 export function FileUpload({
@@ -23,7 +25,8 @@ export function FileUpload({
   uploadProgress = 0,
   accept = 'image/jpeg,image/png,image/jpg,image/webp',
   label = 'Arquivo do Filme',
-  error
+  error,
+  currentFileUrl
 }: FileUploadProps) {
   const { theme } = useTheme()
   const [isDragOver, setIsDragOver] = useState(false)
@@ -133,7 +136,7 @@ export function FileUpload({
               </div>
               <div>
                 <p
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-montserratMedium ${
                     theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
                   }`}
                 >
@@ -175,6 +178,34 @@ export function FileUpload({
               </svg>
             </Button>
           </div>
+        ) : currentFileUrl ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 overflow-hidden rounded">
+                <img
+                  src={getImageUrl(currentFileUrl)}
+                  alt="Arquivo atual"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <p
+                  className={`text-sm font-montserratMedium ${
+                    theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+                  }`}
+                >
+                  Arquivo atual
+                </p>
+                <p
+                  className={`text-xs ${
+                    theme === 'dark' ? 'text-mauve-11' : 'text-mauve-9'
+                  }`}
+                >
+                  Clique para alterar
+                </p>
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center">
             <svg
@@ -193,7 +224,7 @@ export function FileUpload({
               />
             </svg>
             <p
-              className={`text-sm font-medium ${
+              className={`text-lg font-montserratMedium ${
                 theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
               }`}
             >

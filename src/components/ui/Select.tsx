@@ -46,7 +46,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ))}
           </select>
 
-          {/* Arrow Icon */}
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <svg
               className={`h-5 w-5 ${

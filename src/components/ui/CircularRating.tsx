@@ -34,7 +34,7 @@ export function CircularRating({
 
   return (
     <div className="relative flex items-center justify-center">
-      <svg width={size} height={size} className="rotate-[120deg] transform">
+      <svg width={size} height={size} className="rotate-[100deg] transform">
         <circle
           cx={size / 2}
           cy={size / 2}
