@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useAuth } from '@/contexts/AuthContext'
 import { getMovieBySlug, deleteMovie } from '@/services/api'
 import { Movie } from '@/@types/movie'
 import { Header } from '@/components/layout/Header'
@@ -15,16 +16,22 @@ import { InfoCard } from '@/components/ui/InfoCard'
 import { SynopsisCard } from '@/components/ui/SynopsisCard'
 import { GenresSection } from '@/components/ui/GenresSection'
 import { getImageUrl } from '@/utils/imageUrl'
+import { EditMovieModal } from '@/components/EditMovieModal'
 
 export default function MovieDetailsPage() {
   const { slug } = useParams()
   const router = useRouter()
   const { theme } = useTheme()
+  const { userId } = useAuth()
   const [movie, setMovie] = useState<Movie | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+
+  // Check if current user is the owner of the movie
+  const isOwner = movie && userId && movie.userId === userId
 
   useEffect(() => {
     if (slug) {
@@ -46,7 +53,11 @@ export default function MovieDetailsPage() {
   }
 
   const handleEdit = () => {
-    console.log('Editar filme:', movie?.id)
+    setIsEditModalOpen(true)
+  }
+
+  const handleMovieUpdated = () => {
+    fetchMovie()
   }
 
   const handleDeleteClick = () => {
@@ -88,7 +99,7 @@ export default function MovieDetailsPage() {
       RELEASED: 'Lançado',
       IN_PRODUCTION: 'Em Produção',
       PLANNED: 'Planejado',
-      CANCELLED: 'Cancelado',
+      CANCELLED: 'Cancelado'
     }
     return statusMap[status as keyof typeof statusMap] || status
   }
@@ -97,7 +108,7 @@ export default function MovieDetailsPage() {
     const languageMap = {
       PT: 'Português',
       EN: 'Inglês',
-      ES: 'Espanhol',
+      ES: 'Espanhol'
     }
     return languageMap[language as keyof typeof languageMap] || language
   }
@@ -165,8 +176,8 @@ export default function MovieDetailsPage() {
             <div className="absolute right-0 top-0 z-10 h-[603px] w-full max-w-none">
               <img
                 src={
-                  movie.file?.url
-                    ? getImageUrl(movie.file.url)
+                  movie.bannerFile?.url
+                    ? getImageUrl(movie.bannerFile.url)
                     : '/placeholder-backdrop.svg'
                 }
                 alt={`${movie.title} backdrop`}
@@ -178,7 +189,7 @@ export default function MovieDetailsPage() {
                   background:
                     theme === 'dark'
                       ? 'linear-gradient(270deg, rgba(18, 17, 19, 0.9) 0%, rgba(18, 17, 19, 0.7) 30%, rgba(18, 17, 19, 0.5) 70%, rgba(18, 17, 19, 0.7) 100%)'
-                      : 'linear-gradient(270deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 30%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0.85) 100%)',
+                      : 'linear-gradient(270deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 30%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0.85) 100%)'
                 }}
               />
             </div>
@@ -202,6 +213,7 @@ export default function MovieDetailsPage() {
                   onClick={handleDeleteClick}
                   variant="secondary"
                   className="font-montserratMedium max-sm:flex-1"
+                  disabled={!isOwner}
                 >
                   Deletar
                 </Button>
@@ -209,6 +221,7 @@ export default function MovieDetailsPage() {
                   onClick={handleEdit}
                   variant="primary"
                   className="max-sm:flex-1"
+                  disabled={!isOwner}
                 >
                   Editar
                 </Button>
@@ -219,9 +232,9 @@ export default function MovieDetailsPage() {
               <div className="grid grid-cols-[374px_1fr] gap-6 max-xl:hidden">
                 <div>
                   <div className="h-[542px] w-[374px] overflow-hidden rounded shadow-lg">
-                    {movie.file?.url ? (
+                    {movie.posterFile?.url ? (
                       <img
-                        src={getImageUrl(movie.file.url)}
+                        src={getImageUrl(movie.posterFile.url)}
                         alt={movie.title}
                         className="h-full w-full object-cover"
                       />
@@ -236,7 +249,7 @@ export default function MovieDetailsPage() {
                 <div className="grid grid-cols-[minmax(300px,1fr)_minmax(280px,320px)] gap-6">
                   <div className="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4">
                     <div
-                      className={`font-montserratMedium flex items-center justify-center ${
+                      className={`flex items-center font-montserratMedium ${
                         theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
                       }`}
                     >
@@ -322,9 +335,9 @@ export default function MovieDetailsPage() {
                 <div className="grid grid-cols-[300px_1fr] gap-6 max-lg:grid-cols-[250px_1fr] max-lg:gap-4">
                   <div>
                     <div className="h-[435px] w-[300px] overflow-hidden rounded shadow-lg max-lg:h-[362px] max-lg:w-[250px]">
-                      {movie.file?.url ? (
+                      {movie.posterFile?.url ? (
                         <img
-                          src={getImageUrl(movie.file.url)}
+                          src={getImageUrl(movie.posterFile.url)}
                           alt={movie.title}
                           className="h-full w-full object-cover"
                         />
@@ -400,7 +413,7 @@ export default function MovieDetailsPage() {
 
                 <div className="grid grid-cols-1 gap-4">
                   <div
-                    className={`font-montserratMedium flex items-center justify-center ${
+                    className={`flex items-center justify-center font-montserratMedium ${
                       theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
                     }`}
                   >
@@ -420,9 +433,9 @@ export default function MovieDetailsPage() {
               <div className="hidden grid-cols-1 gap-4 max-sm:grid">
                 <div className="flex justify-center">
                   <div className="aspect-[382/582] h-auto w-full max-w-[382px] overflow-hidden rounded shadow-lg">
-                    {movie.file?.url ? (
+                    {movie.posterFile?.url ? (
                       <img
-                        src={getImageUrl(movie.file.url)}
+                        src={getImageUrl(movie.posterFile.url)}
                         alt={movie.title}
                         className="h-full w-full object-cover"
                       />
@@ -463,11 +476,11 @@ export default function MovieDetailsPage() {
                 </div>
 
                 <div
-                  className={`font-montserratMedium flex items-center justify-center p-4 ${
+                  className={`flex items-center justify-center p-4 font-montserratMedium ${
                     theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
                   }`}
                 >
-                  <p className="break-words text-center text-base italic">{`"${movie.tagline}"`}</p>
+                  <p className="break-words text-left text-base italic">{`"${movie.tagline}"`}</p>
                 </div>
 
                 <SynopsisCard title="Sinopse" content={movie.description} />
@@ -534,6 +547,15 @@ export default function MovieDetailsPage() {
         confirmText="Excluir"
         isLoading={isDeleting}
       />
+
+      {movie && (
+        <EditMovieModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onMovieUpdated={handleMovieUpdated}
+          movie={movie}
+        />
+      )}
     </div>
   )
 }
