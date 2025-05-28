@@ -94,3 +94,17 @@ export async function uploadFile(file: File): Promise<{ fileId: string }> {
 
   return data.data
 }
+
+export async function subscribeToMovieNotification(movieId: string): Promise<{ message: string }> {
+  const { data } = await api.post<{ message: string }>(`/notifications/movies/${movieId}`)
+  return data
+}
+
+export async function unsubscribeFromMovieNotification(movieId: string): Promise<void> {
+  await api.delete(`/notifications/movies/${movieId}`)
+}
+
+export async function getNotificationStatus(movieId: string): Promise<{ isSubscribed: boolean }> {
+  const { data } = await api.get<{ isSubscribed: boolean }>(`/notifications/movies/${movieId}/status`)
+  return data
+}

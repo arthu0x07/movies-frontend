@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
-import { updateMovie, uploadFile, getUniqueGenres, Genre } from '@/services/api'
+import { updateMovie, uploadFile, getUniqueGenres, Genre, subscribeToMovieNotification } from '@/services/api'
 import { Movie, UpdateMovieData } from '@/@types/movie'
 import { z } from 'zod'
 
@@ -202,6 +202,25 @@ export function useEditMovieForm({ movie, onSuccess, onClose }: UseEditMovieForm
       }
 
       await updateMovie(movie.id, movieData)
+      
+      const newReleaseDate = new Date(data.releaseDate + 'T00:00:00.000Z')
+      const originalReleaseDate = new Date(movie.releaseDate)
+      const today = new Date()
+      const todayUTC = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      
+      if (newReleaseDate > todayUTC && newReleaseDate.getTime() !== originalReleaseDate.getTime()) {
+        try {
+          await subscribeToMovieNotification(movie.id)
+       
+        } catch (error) {
+          console.error('Falha ao inscrever usuário na notificação:', {
+            movieId: movie.id,
+            movieTitle: data.title,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
+      }
+      
       onSuccess()
       onClose()
     } catch (error: any) {

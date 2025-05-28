@@ -91,7 +91,13 @@ export default function MovieDetailsPage() {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR')
+    let date: Date
+    if (dateString.includes('T')) {
+      date = new Date(dateString)
+    } else {
+      date = new Date(dateString + 'T00:00:00.000Z')
+    }
+    return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' })
   }
 
   const getStatusLabel = (status: string) => {
