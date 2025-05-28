@@ -1,4 +1,4 @@
-# Projeto Front End - Cubos Movies
+# Projeto Front End - Cubos
 
 Sistema completo de interface para gerenciamento de filmes com notificações automáticas <br /><br />
 
