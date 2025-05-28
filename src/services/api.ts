@@ -2,6 +2,7 @@ import axios from 'axios'
 import {
   Movie,
   CreateMovieData,
+  UpdateMovieData,
   Genre,
   MoviesResponse,
   MovieResponse,
@@ -30,6 +31,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('@cubos-movies:token')
+      localStorage.removeItem('@cubos-movies:userId')
       document.cookie =
         '@cubos-movies:token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
       window.location.href = '/login'
@@ -66,7 +68,7 @@ export async function createMovie(movieData: CreateMovieData) {
   return data.data
 }
 
-export async function updateMovie(id: string, movie: Partial<Movie>) {
+export async function updateMovie(id: string, movie: UpdateMovieData) {
   const { data } = await api.patch<{ data: Movie }>(`/movies/${id}`, movie)
   return data.data
 }

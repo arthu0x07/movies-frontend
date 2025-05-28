@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 
 interface AuthContextData {
   isAuthenticated: boolean
+  userId: string | null
   signOut: () => void
   checkAuth: () => void
 }
@@ -24,19 +25,24 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
   const router = useRouter()
 
   const checkAuth = useCallback(() => {
     const token = localStorage.getItem('@cubos-movies:token')
+    const storedUserId = localStorage.getItem('@cubos-movies:userId')
     setIsAuthenticated(!!token)
+    setUserId(storedUserId)
   }, [])
 
   const signOut = useCallback(() => {
-    // We are removing token from localStorage and cookie
+    // We are removing token and userId from localStorage and cookie
     localStorage.removeItem('@cubos-movies:token')
+    localStorage.removeItem('@cubos-movies:userId')
     document.cookie =
       '@cubos-movies:token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
     setIsAuthenticated(false)
+    setUserId(null)
     router.push('/login')
   }, [router])
 
@@ -45,7 +51,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [checkAuth])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, signOut, checkAuth }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, userId, signOut, checkAuth }}
+    >
       {children}
     </AuthContext.Provider>
   )

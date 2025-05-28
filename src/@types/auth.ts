@@ -12,6 +12,7 @@ export interface SignUpCredentials {
 export interface SignInResponse {
   data: {
     token: string
+    userId: string
   }
   meta: {
     timestamp: string
