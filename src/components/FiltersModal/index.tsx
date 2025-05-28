@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
 import { useTheme } from '@/contexts/ThemeContext'
-import { getUniqueGenres, Genre } from '@/services/api'
+import { getUniqueGenres } from '@/services/api'
+import { Genre } from '@/@types/movie'
 
 export interface MovieFilters {
   durationMin?: number
@@ -29,7 +30,7 @@ export function FiltersModal({
   isOpen,
   onClose,
   onApplyFilters,
-  currentFilters,
+  currentFilters
 }: FiltersModalProps) {
   const { theme } = useTheme()
   const [filters, setFilters] = useState<MovieFilters>(currentFilters)
@@ -68,7 +69,7 @@ export function FiltersModal({
       releaseDateEnd: '',
       status: '',
       language: '',
-      genreIds: [],
+      genreIds: []
     }
     setFilters(clearedFilters)
     onApplyFilters(clearedFilters)
@@ -83,7 +84,7 @@ export function FiltersModal({
 
     setFilters({
       ...filters,
-      genreIds: newGenres,
+      genreIds: newGenres
     })
   }
 
@@ -92,14 +93,14 @@ export function FiltersModal({
     { value: 'RELEASED', label: 'Lançado' },
     { value: 'IN_PRODUCTION', label: 'Em Produção' },
     { value: 'PLANNED', label: 'Planejado' },
-    { value: 'CANCELLED', label: 'Cancelado' },
+    { value: 'CANCELLED', label: 'Cancelado' }
   ]
 
   const languageOptions = [
     { value: '', label: 'Todos os idiomas' },
     { value: 'PT', label: 'Português' },
     { value: 'EN', label: 'Inglês' },
-    { value: 'ES', label: 'Espanhol' },
+    { value: 'ES', label: 'Espanhol' }
   ]
 
   return (
@@ -117,7 +118,7 @@ export function FiltersModal({
                   ...filters,
                   durationMin: e.target.value
                     ? Number(e.target.value)
-                    : undefined,
+                    : undefined
                 })
               }
             />
@@ -131,7 +132,7 @@ export function FiltersModal({
                   ...filters,
                   durationMax: e.target.value
                     ? Number(e.target.value)
-                    : undefined,
+                    : undefined
                 })
               }
             />
@@ -147,7 +148,7 @@ export function FiltersModal({
               onChange={(e) =>
                 setFilters({
                   ...filters,
-                  releaseDateStart: e.target.value,
+                  releaseDateStart: e.target.value
                 })
               }
             />
@@ -158,7 +159,7 @@ export function FiltersModal({
               onChange={(e) =>
                 setFilters({
                   ...filters,
-                  releaseDateEnd: e.target.value,
+                  releaseDateEnd: e.target.value
                 })
               }
             />
@@ -178,7 +179,7 @@ export function FiltersModal({
                   | 'IN_PRODUCTION'
                   | 'PLANNED'
                   | 'CANCELLED'
-                  | '',
+                  | ''
               })
             }
           />
@@ -190,7 +191,7 @@ export function FiltersModal({
             onChange={(e) =>
               setFilters({
                 ...filters,
-                language: e.target.value as 'PT' | 'EN' | 'ES' | '',
+                language: e.target.value as 'PT' | 'EN' | 'ES' | ''
               })
             }
           />
