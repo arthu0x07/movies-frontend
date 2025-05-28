@@ -7,13 +7,8 @@ import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
 import { FileUpload } from '@/components/ui/FileUpload'
 import { useTheme } from '@/contexts/ThemeContext'
-import {
-  createMovie,
-  uploadFile,
-  getUniqueGenres,
-  Genre,
-  CreateMovieData
-} from '@/services/api'
+import { createMovie, uploadFile, getUniqueGenres } from '@/services/api'
+import { Genre, CreateMovieData } from '@/@types/movie'
 
 interface AddMovieModalProps {
   isOpen: boolean
@@ -61,7 +56,12 @@ export function AddMovieModal({
     genreIds: []
   })
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedPosterFile, setSelectedPosterFile] = useState<File | null>(
+    null
+  )
+  const [selectedBannerFile, setSelectedBannerFile] = useState<File | null>(
+    null
+  )
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -105,7 +105,8 @@ export function AddMovieModal({
       ratingPercentage: '',
       genreIds: []
     })
-    setSelectedFile(null)
+    setSelectedPosterFile(null)
+    setSelectedBannerFile(null)
     setErrors({})
     setIsUploading(false)
     setUploadProgress(0)
@@ -175,14 +176,37 @@ export function AddMovieModal({
   }
 
   const handleFileSelect = (file: File) => {
-    setSelectedFile(file)
+    setSelectedPosterFile(file)
     if (errors.file) {
       setErrors((prev) => ({ ...prev, file: '' }))
     }
   }
 
+  const handlePosterFileSelect = (file: File) => {
+    setSelectedPosterFile(file)
+    if (errors.posterFile) {
+      setErrors((prev) => ({ ...prev, posterFile: '' }))
+    }
+  }
+
+  const handleBannerFileSelect = (file: File) => {
+    setSelectedBannerFile(file)
+    if (errors.bannerFile) {
+      setErrors((prev) => ({ ...prev, bannerFile: '' }))
+    }
+  }
+
   const handleFileRemove = () => {
-    setSelectedFile(null)
+    setSelectedPosterFile(null)
+    setSelectedBannerFile(null)
+  }
+
+  const handlePosterFileRemove = () => {
+    setSelectedPosterFile(null)
+  }
+
+  const handleBannerFileRemove = () => {
+    setSelectedBannerFile(null)
   }
 
   const handleSubmit = async () => {
@@ -191,38 +215,67 @@ export function AddMovieModal({
     setIsSubmitting(true)
 
     try {
-      let fileId: string | undefined
+      let posterFileId: string | undefined
+      let bannerFileId: string | undefined
 
-      // Upload do arquivo se selecionado
-      if (selectedFile) {
+      // Upload poster file if selected
+      if (selectedPosterFile) {
         setIsUploading(true)
         setUploadProgress(0)
 
-        // Simular progresso do upload
+        const progressInterval = setInterval(() => {
+          setUploadProgress((prev) => {
+            if (prev >= 45) {
+              clearInterval(progressInterval)
+              return 45
+            }
+            return prev + 5
+          })
+        }, 100)
+
+        try {
+          const uploadResult = await uploadFile(selectedPosterFile)
+          posterFileId = uploadResult.fileId
+          setUploadProgress(50)
+          clearInterval(progressInterval)
+        } catch (error) {
+          clearInterval(progressInterval)
+          throw new Error('Erro ao fazer upload do poster')
+        }
+      }
+
+      // Upload banner file if selected
+      if (selectedBannerFile) {
+        if (!selectedPosterFile) {
+          setIsUploading(true)
+          setUploadProgress(0)
+        }
+
         const progressInterval = setInterval(() => {
           setUploadProgress((prev) => {
             if (prev >= 90) {
               clearInterval(progressInterval)
               return 90
             }
-            return prev + 10
+            return prev + 5
           })
         }, 100)
 
         try {
-          const uploadResult = await uploadFile(selectedFile)
-          fileId = uploadResult.fileId
+          const uploadResult = await uploadFile(selectedBannerFile)
+          bannerFileId = uploadResult.fileId
           setUploadProgress(100)
           clearInterval(progressInterval)
         } catch (error) {
           clearInterval(progressInterval)
-          throw new Error('Erro ao fazer upload do arquivo')
+          throw new Error('Erro ao fazer upload do banner')
         } finally {
           setIsUploading(false)
         }
+      } else if (selectedPosterFile) {
+        setIsUploading(false)
       }
 
-      // Criar o filme
       const movieData: CreateMovieData = {
         title: formData.title,
         originalTitle: formData.originalTitle,
@@ -242,7 +295,8 @@ export function AddMovieModal({
         votes: Number(formData.votes),
         ratingPercentage: Number(formData.ratingPercentage),
         genresIds: formData.genreIds,
-        fileId
+        posterFileId,
+        bannerFileId
       }
 
       await createMovie(movieData)
@@ -281,17 +335,48 @@ export function AddMovieModal({
       position="right"
     >
       <div className="space-y-6">
-        {/* Upload de Arquivo */}
-        <FileUpload
-          onFileSelect={handleFileSelect}
-          onFileRemove={handleFileRemove}
-          selectedFile={selectedFile || undefined}
-          isUploading={isUploading}
-          uploadProgress={uploadProgress}
-          error={errors.file}
-        />
+        <div>
+          <label
+            className={`font-robotoBold text-lg font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+            }`}
+          >
+            Poster do Filme
+          </label>
+          <div className="mt-2">
+            <FileUpload
+              onFileSelect={handlePosterFileSelect}
+              onFileRemove={handlePosterFileRemove}
+              selectedFile={selectedPosterFile || undefined}
+              isUploading={isUploading && !!selectedPosterFile}
+              uploadProgress={selectedPosterFile ? uploadProgress : 0}
+              error={errors.posterFile}
+              label=""
+            />
+          </div>
+        </div>
 
-        {/* Informações Básicas */}
+        <div>
+          <label
+            className={`font-robotoBold text-lg font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-mauve-dark-1'
+            }`}
+          >
+            Banner do Filme
+          </label>
+          <div className="mt-2">
+            <FileUpload
+              onFileSelect={handleBannerFileSelect}
+              onFileRemove={handleBannerFileRemove}
+              selectedFile={selectedBannerFile || undefined}
+              isUploading={isUploading && !!selectedBannerFile}
+              uploadProgress={selectedBannerFile ? uploadProgress : 0}
+              error={errors.bannerFile}
+              label=""
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             label="Título *"
@@ -327,7 +412,6 @@ export function AddMovieModal({
           placeholder="Ex: O mundo mudou para sempre"
         />
 
-        {/* Data e Duração */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             label="Data de Lançamento *"
@@ -347,7 +431,6 @@ export function AddMovieModal({
           />
         </div>
 
-        {/* Status e Idioma */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Select
             label="Status *"
@@ -365,7 +448,6 @@ export function AddMovieModal({
           />
         </div>
 
-        {/* Orçamento e Receita */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             label="Orçamento (USD) *"
@@ -387,7 +469,6 @@ export function AddMovieModal({
           />
         </div>
 
-        {/* Popularidade, Votos e Avaliação */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Input
             label="Popularidade (0-10) *"
@@ -423,7 +504,6 @@ export function AddMovieModal({
           />
         </div>
 
-        {/* Gêneros */}
         <div>
           <label
             className={`font-robotoBold text-lg font-bold ${
@@ -475,14 +555,12 @@ export function AddMovieModal({
           )}
         </div>
 
-        {/* Erro geral */}
         {errors.submit && (
           <div className="rounded bg-red-50 p-3 text-red-700">
             {errors.submit}
           </div>
         )}
 
-        {/* Botões */}
         <div className="flex gap-2 pt-4">
           <Button
             variant="secondary"

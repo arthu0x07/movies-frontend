@@ -19,9 +19,15 @@ export interface Movie {
   popularity: number
   votes: number
   ratingPercentage: number
+  userId: string
   genresIds: string[]
-  fileId: string
-  file: {
+  posterFileId?: string
+  posterFile?: {
+    id: string
+    url: string
+  }
+  bannerFileId?: string
+  bannerFile?: {
     id: string
     url: string
   }
@@ -43,7 +49,27 @@ export interface CreateMovieData {
   votes: number
   ratingPercentage: number
   genresIds: string[]
-  fileId?: string
+  posterFileId?: string
+  bannerFileId?: string
+}
+
+export interface UpdateMovieData {
+  title?: string
+  originalTitle?: string
+  description?: string
+  tagline?: string
+  releaseDate?: string
+  duration?: number
+  status?: 'RELEASED' | 'IN_PRODUCTION' | 'PLANNED' | 'CANCELLED'
+  language?: 'PT' | 'EN' | 'ES'
+  budget?: number
+  revenue?: number
+  popularity?: number
+  votes?: number
+  ratingPercentage?: number
+  genresIds?: string[]
+  posterFileId?: string
+  bannerFileId?: string
 }
 
 export interface MoviesResponse {
